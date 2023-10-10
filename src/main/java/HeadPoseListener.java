@@ -1,17 +1,24 @@
 import com.github.sarxos.webcam.*;
 import java.awt.image.*;
+import java.util.*;
 import java.util.concurrent.atomic.*;
+import java.util.stream.*;
 import org.apache.logging.log4j.*;
 
 public class HeadPoseListener {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
+    private String preferredCameraKeyword = null;
     private Thread workerThread = null;
     private AtomicBoolean workerActive = new AtomicBoolean(false);
     private long workerDelayInMs = 100L;
     private Runnable taskOfHeadTurnedLeft = null;
     private Runnable taskOfHeadTurnedRight = null;
+
+    public void setPreferredCameraKeyword(String keyword) {
+        this.preferredCameraKeyword = keyword;
+    }
 
     public void setWorkerDelayInMs(long delayInMs) {
         this.workerDelayInMs = delayInMs;
@@ -25,12 +32,32 @@ public class HeadPoseListener {
         this.taskOfHeadTurnedRight = task;
     }
 
+    private Webcam findCameraToUse() {
+        List<Webcam> webcams = Webcam.getWebcams();
+        if (this.preferredCameraKeyword != null) {
+            for (Webcam webcam : webcams) {
+                if (webcam.getName().toLowerCase().contains(this.preferredCameraKeyword.toLowerCase())) {
+                    LOGGER.info("Found Preferred Webcam: " + webcam.getName());
+                    return webcam;
+                }
+            }
+        }
+        LOGGER.info("Try Using First Enumerated Webcam: " + webcams.stream().map(Webcam::getName).collect(Collectors.toList()));
+        return webcams.stream().findFirst().orElse(null);
+    }
+
     public void startMonitoring() {
 
         LOGGER.info("Start Monitoring");
 
         Runnable task = () -> {
-            Webcam webcam = Webcam.getDefault();
+
+            Webcam webcam = this.findCameraToUse();
+            if (webcam == null) {
+                LOGGER.info("No Webcam Detected");
+                return;
+            }
+
             try (HeadTurnDetector headTurnDetector = new HeadTurnDetector("model.onnx")) {
                 webcam.open();
                 HeadTurnDetector.HeadTurn lastStatus = HeadTurnDetector.HeadTurn.CENTERED;

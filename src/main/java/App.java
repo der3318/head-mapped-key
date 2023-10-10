@@ -22,6 +22,7 @@ public class App {
         int keyOnHeadTurnedRight = KeyEvent.class.getField(props.getProperty("keyname.head.right")).getInt(null);
 
         HeadPoseListener headPoseListener = new HeadPoseListener();
+        headPoseListener.setPreferredCameraKeyword(props.getProperty("camera.keyword"));
         headPoseListener.setWorkerDelayInMs(Long.parseLong(props.getProperty("worker.delay")));
         headPoseListener.onHeadTurnedLeft(() -> keyPressAndRelease(robot, keyOnHeadTurnedLeft));
         headPoseListener.onHeadTurnedRight(() -> keyPressAndRelease(robot, keyOnHeadTurnedRight));

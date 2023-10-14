@@ -80,7 +80,7 @@ public class HeadTurnDetector implements AutoCloseable {
             long[][][] kpts = (long[][][]) output.get(2).getValue();
             long[][][] lmks = (long[][][]) output.get(4).getValue();
             LOGGER.debug("Scores: " + Arrays.toString(scores));
-            LOGGER.debug("BBoxes: " + Arrays.deepToString(bboxes));  // top left (col, row), botoom right (col, row)
+            LOGGER.debug("BBoxes: " + Arrays.deepToString(bboxes));  // top left (col, row), bottom right (col, row)
             LOGGER.debug("KeyPts: " + Arrays.deepToString(kpts));    // left eye, right eye, nose, left mouth, right mouth
             LOGGER.debug("Output Length: " + lmks.length);
 

@@ -21,7 +21,7 @@ A Java program that can trigger keyboard actions using head poses streamed from 
 
 | Using JRE 17+ |
 | :- |
-| Download fat JAR [head-mapped-key-all.jar](https://github.com/der3318/head-mapped-key/releases/download/2023.10.16/head-mapped-key-all.jar) and run `java -Duser.language=en -Dfile.encoding=UTF8 -jar head-mapped-key-all.jar` in CLI. |
+| Download fat JAR [head-mapped-key-all.jar](https://github.com/der3318/head-mapped-key/releases/download/2023.10.16/head-mapped-key-all.jar), [model.onnx](https://github.com/der3318/head-mapped-key/blob/main/model.onnx) and [app.properties](https://github.com/der3318/head-mapped-key/blob/main/app.properties) from repo. Put them together and run `java -Duser.language=en -Dfile.encoding=UTF8 -jar head-mapped-key-all.jar` in CLI. |
 
 
 | Using Gradle Wrapper |
